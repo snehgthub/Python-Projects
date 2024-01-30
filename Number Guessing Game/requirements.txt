@@ -1,0 +1,4 @@
+art==6.1
+keyboard==0.13.5
+progress==1.6
+termcolor==2.4.0
