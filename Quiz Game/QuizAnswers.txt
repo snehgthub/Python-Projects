@@ -1,0 +1,4 @@
+central processing unit
+graphics processing unit
+random access memory
+power supply unit
