@@ -20,7 +20,7 @@ try:
         answers = ansFile.read().split('\n')
         
         for question in questions:
-            print(f"Question {iter}:", end=" ")
+            print(f"Question {iter+1}:", end=" ")
             userAnswer = input(question)
            
             if userAnswer.lower() == answers[iter]:
