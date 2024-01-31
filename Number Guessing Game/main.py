@@ -1,20 +1,13 @@
 import os
+import sys
 import random
 import time
-import keyboard
 from termcolor import colored
 from logo import logo_text
 
 def clear():
     os.system("clear")
 
-clear()
-logo_text("Number", "Guesser")
-
-total_chances=0
-guessed=False
-guess_count=0
-top_range = 50
 
 def rules():
     print(colored("Objective: ",'cyan'))
@@ -42,148 +35,179 @@ def rules():
     print(colored("Losing: ",'cyan'))
     print("• If you fail to guess the number within the allotted attempts, the game ends and the correct number is revealed.\n")
 
-rules()
 
-print(colored("\nProceed with the game? (",'yellow'),end='')
-print(colored("Y",'green'),end='')
-print(colored("/",'yellow'),end='')
-print(colored("N",'red'),end='')
-print(colored(") ",'yellow'),end='')
-
-confirmation_start=input()
-
-if confirmation_start.lower() != 'y':
-    print()
-    quit()
-
-clear()
-
-logo_text("Number", "Guesser")
-
-print(colored("Difficulty levels: ",'yellow'))
-print(colored("• Easy",'green'))
-print(colored("• Medium",'red'))
-print(colored("• Hard\n",'magenta'))
-
-print(colored("Press ",'yellow'),end='')
-print("(",end='')
-print(colored("E",'green'),end='')
-print(")",end='')
-print(colored("asy, ",'yellow'),end='')
-print("(",end='')
-print(colored("M",'red'),end='')
-print(")",end='')
-print(colored("edium or ",'yellow'),end='')
-print("(",end='')
-print(colored("H",'magenta'),end='')
-print(")",end='')
-print(colored("ard for choosing difficulty level: ",'yellow'),end='')
-
-level = input()
-
-# if not level.isdigit():
-#     print(colored("\nNot a number!!\nPlease choose a valid difficulty level next time.\n",'red'))
-#     quit()
-
-if level.upper() == 'E': 
-    print(colored("\nYou chose ", 'yellow'),end='')
-    print(colored("'Easy' ",'green'),end='')
-    print(colored("level. So you'll have ",'yellow'),end='')
-    print(colored("'10 chances'",'green'),end='')
-    print(colored(" to guess the number.",'yellow'),end='')
-    total_chances=10
-
-elif level.upper() == 'M': 
-    print(colored("\nYou chose ", 'yellow'),end='')
-    print(colored("'Medium' ",'red'),end='')
-    print(colored("level. So you'll have ",'yellow'),end='')
-    print(colored("'5 chances'",'red'),end='')
-    print(colored(" to guess the number.",'yellow'),end='')
-    total_chances=5
-
-elif level.upper() == 'H':
-    print(colored("\nYou chose ", 'yellow'),end='')
-    print(colored("'Hard' ",'magenta'),end='')
-    print(colored("level. So you'll have ",'yellow'),end='')
-    print(colored("'3 chances'",'magenta'),end='')
-    print(colored(" to guess the number.",'yellow'),end='')
-    total_chances=3
-
-else:
-    print(colored("\nInvalid Input. Please try again!\n", 'red'))
-    quit()
-
-print(colored("\n\nAre you ready? (",'yellow'),end='')
-print(colored("Y",'green'),end='')
-print(colored("/",'yellow'),end='')
-print(colored("N",'red'),end='')
-print(colored(") ",'yellow'),end='')
-
-confirmation_ready=input()
-
-if confirmation_ready.lower() != 'y':
-    print()
-    quit()
-
-random_num = random.randint(1,int(top_range))
-
-clear()
-logo_text("Number", "Guesser")
-
-guess_prompts = [
-    "Let's start! Your guess? ",
-    "Not quite, try again: ",
-    "Missed! Another go: ",
-    "Oops, guess once more: ",
-    "Still not right, guess again: ",
-    "Halfway there! Your next guess? ",
-    "Close but not yet, try again: ",
-    "Only a few tries left, guess: ",
-    "Almost there, think carefully: ",
-    "Last chance! Your guess? "
-]
-
-for i in range(total_chances):
-
-    user_guess = input(colored("\n"+guess_prompts[i],'yellow'))
-    guess_count+=1
-
-    if not user_guess.isdigit():
-        print(colored("\nPlease enter a valid number!!",'red'))
-        continue
-
-    user_guess=int(user_guess)
+def confirmation(conf_type: str):
     
-    if user_guess == random_num:
-        print(colored("• Correct! You did it!",'green'))
-        guessed=True
-        break
+    confirmation_msg = ["\nProceed with the game? (",
+                    "\n\nAre you ready? ("]
+    
+    if conf_type == 'start':
+        print(colored(confirmation_msg[0],'yellow'),end='')
 
-    elif user_guess > random_num:
-        print(colored("• You are above the number!",'cyan'))
-        print(colored(f"• Guesses left: {total_chances-i-1}",'magenta'))
+    elif conf_type == 'ready':
+        print(colored(confirmation_msg[1],'yellow'),end='')
 
     else:
-        print(colored("• You are below the number!", 'cyan'))
-        print(colored(f"• Guesses left: {total_chances-i-1}",'magenta'))
+        print(colored("Invalid Confirmation Input!!", 'red'))
+        quit()
 
-if guessed:
-    print(colored("\nYou guessed the number in",'yellow'),end=' ')
-    print(colored(str(guess_count),'blue'),end=' ')
-    print(colored("tries!\n",'yellow'))
-else:
-    print(colored("\nAllowed Chances Exceeded!!\nThe number was",'yellow'),end=' ')
-    print(colored(str(random_num), 'blue'),end='')
-    print(colored(".",'yellow'))
+    print(colored("Y",'green'),end='')
+    print(colored("/",'yellow'),end='')
+    print(colored("N",'red'),end='')
+    print(colored(") ",'yellow'),end='')
+
+    if conf_type == 'start':
+        confirmation_start=input()
+
+        if confirmation_start.lower() != 'y':
+            print()
+            quit()
+    else:
+        confirmation_ready=input()
+
+        if confirmation_ready.lower() != 'y':
+            print()
+            quit()
 
 
-time.sleep(3)
-clear()
-logo_text("Game", "Over!", "RED", "RED")
+def choose_difficulty():
 
-print(colored("Quitting...",'red'))
-print()
-time.sleep(2)
+    print(colored("Difficulty levels: ",'yellow'))
+    print(colored("• Easy",'green'))
+    print(colored("• Medium",'red'))
+    print(colored("• Hard\n",'magenta'))
+
+    print(colored("Press ",'yellow'),end='')
+    print("(",end='')
+    print(colored("E",'green'),end='')
+    print(")",end='')
+    print(colored("asy, ",'yellow'),end='')
+    print("(",end='')
+    print(colored("M",'red'),end='')
+    print(")",end='')
+    print(colored("edium or ",'yellow'),end='')
+    print("(",end='')
+    print(colored("H",'magenta'),end='')
+    print(")",end='')
+    print(colored("ard for choosing difficulty level: ",'yellow'),end='')
+
+    level = input()
+
+    if level.upper() == 'E': 
+        print(colored("\nYou chose ", 'yellow'),end='')
+        print(colored("'Easy' ",'green'),end='')
+        print(colored("level. So you'll have ",'yellow'),end='')
+        print(colored("'10 chances'",'green'),end='')
+        print(colored(" to guess the number.",'yellow'),end='')
+        total_chances=10
+
+    elif level.upper() == 'M': 
+        print(colored("\nYou chose ", 'yellow'),end='')
+        print(colored("'Medium' ",'red'),end='')
+        print(colored("level. So you'll have ",'yellow'),end='')
+        print(colored("'5 chances'",'red'),end='')
+        print(colored(" to guess the number.",'yellow'),end='')
+        total_chances=5
+
+    elif level.upper() == 'H':
+        print(colored("\nYou chose ", 'yellow'),end='')
+        print(colored("'Hard' ",'magenta'),end='')
+        print(colored("level. So you'll have ",'yellow'),end='')
+        print(colored("'3 chances'",'magenta'),end='')
+        print(colored(" to guess the number.",'yellow'),end='')
+        total_chances=3
+
+    else:
+        print(colored("\nInvalid Input. Please try again!\n", 'red'))
+        quit()
+    
+    return total_chances
+
+
+def number_guesser(total_chances:int, guessed: bool, guess_count: int):
+
+    random_num = random.randint(1,int(top_range))
+    guess_prompts = [
+        "Let's start! Your guess? ",
+        "Not quite, try again: ",
+        "Missed! Another go: ",
+        "Oops, guess once more: ",
+        "Still not right, guess again: ",
+        "Halfway there! Your next guess? ",
+        "Close but not yet, try again: ",
+        "Only a few tries left, guess: ",
+        "Almost there, think carefully: ",
+        "Last chance! Your guess? "
+    ]
+
+    for i in range(total_chances):
+
+        user_guess = input(colored("\n"+guess_prompts[i],'yellow'))
+        guess_count+=1
+
+        if not user_guess.isdigit():
+            print(colored("\nPlease enter a valid number!!",'red'))
+            continue
+
+        user_guess=int(user_guess)
+        
+        if user_guess == random_num:
+            print(colored("• Correct! You did it!",'green'))
+            guessed=True
+            break
+
+        elif user_guess > random_num:
+            print(colored("• You are above the number!",'cyan'))
+            print(colored(f"• Guesses left: {total_chances-i-1}",'magenta'))
+
+        else:
+            print(colored("• You are below the number!", 'cyan'))
+            print(colored(f"• Guesses left: {total_chances-i-1}",'magenta'))
+
+    if guessed:
+        print(colored("\nYou guessed the number in",'yellow'),end=' ')
+        print(colored(str(guess_count),'blue'),end=' ')
+        print(colored("tries!\n",'yellow'))
+        time.sleep(4)
+    else:
+        print(colored("\nAllowed Chances Exceeded!!\nThe number was",'yellow'),end=' ')
+        print(colored("'"+str(random_num)+"'", 'blue'),end='')
+        print(colored(".",'yellow'))
+        time.sleep(2)
+
+def animate_message(message, color, total_dots=3, duration=1):
+    for i in range(total_dots + 1):
+        colored_message = colored(text=message + "." * i, color=color)
+        sys.stdout.write("\r" + colored_message)
+        sys.stdout.flush()
+        time.sleep(duration / total_dots)
+    print()
+
+def game_over():
+    clear()
+    logo_text("Game", "Over!", "RED", "RED")
+
+    animate_message("Quitting", color="red", total_dots=3, duration=2)
+
+
 
 if __name__ == "__main__":
-    pass
+    total_chances=0
+    hasGuessed=False
+    guess_count=0
+    top_range = 50
+
+    clear()
+    logo_text("Number", "Guesser")
+    rules()
+    confirmation('start')    
+
+    clear()
+    logo_text("Number", "Guesser")
+    total_chances = choose_difficulty()
+    confirmation('ready')
+
+    clear()
+    logo_text("Number", "Guesser")
+    number_guesser(total_chances, hasGuessed, guess_count)
+    game_over()

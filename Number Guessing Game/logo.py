@@ -41,18 +41,16 @@ def logo_text(str1, str2, color1=GREEN, color2=YELLOW):
     if color1.upper()=="RED" and color2.upper()=="RED":
         color1=RED
         color2=RED
-        colored_art1 = colorize_art(ascii_art1, color1)
-        colored_art2 = colorize_art(ascii_art2, color2)
-        combined_art = combine_ascii_art(colored_art1, colored_art2)
-        print(center_align_art(combined_art))
         
-    else:
+    colored_art1 = colorize_art(ascii_art1, color1)
+    colored_art2 = colorize_art(ascii_art2, color2)
+    combined_art = combine_ascii_art(colored_art1, colored_art2)
     
-        colored_art1 = colorize_art(ascii_art1, color1)
-        colored_art2 = colorize_art(ascii_art2, color2)
+        
+    if color1.upper()=="RED":
+        print(center_align_art(combined_art))
 
-        combined_art = combine_ascii_art(colored_art1, colored_art2)
+    else:
         columns, _ = shutil.get_terminal_size()
         centered_ascii_art = center_align_pattern(combined_art, columns)
-
         print(centered_ascii_art)
